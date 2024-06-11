@@ -1,8 +1,9 @@
 ---
 import '../styles/global.css';
+import Navigation from '../components/Navigation.astro';
 
-type EdoCulo = "My Astro Learning Blog" | "adsdasd";
-const pageTitle : EdoCulo = "My Astro Learning Blog";
+type SmaCulo = "My Astro Learning Blog" | "adsdasd";
+const pageTitle : SmaCulo = "My Astro Learning Blog";
 ---
 
 <!DOCTYPE html>
@@ -16,13 +17,7 @@ const pageTitle : EdoCulo = "My Astro Learning Blog";
 <body>
   <header>
     <h1>Welcome to {pageTitle}</h1>
-    <nav>
-      <ul>
-        <li><a href="/">Home</a></li>
-        <li><a href="/about">About</a></li>
-        <li><a href="/contact">Contact</a></li>
-      </ul>
-    </nav>
+    <Navigation />
   </header>
 
   <main>
