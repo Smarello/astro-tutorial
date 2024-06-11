@@ -20,14 +20,7 @@ const pageTitle = 'Homepage';
     <p>I am a software developer passionate about Astro programming.</p>
     <Footer />
     <script>
-      const hamburger = document.querySelector('.hamburger');
-
-      if (hamburger) {
-        hamburger.addEventListener('click', () => {
-          const navLinks = document.querySelector('.nav-links');
-          if (navLinks) navLinks.classList.toggle('expanded');
-        });
-      }
+      import "../scripts/menu.ts"
     </script>
   </body>
 </html>
