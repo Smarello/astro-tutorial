@@ -8,18 +8,15 @@ type AstroBlogPostWithParams = {params: {tag: string}, props: { posts: MarkdownI
 export async function getStaticPaths() : Promise<AstroBlogPostWithParams[]> {
   
   const allPosts = await Astro.glob('../posts/*.md');
-  const allComponents = await Astro.glob('../../components/*.astro');
-  console.log(JSON.stringify(allComponents));
-  
+  const uniqueTags = [...new Set(allPosts.map((post) => post.frontmatter.tags).flat())];
 
-  const retVal2 = [
-    {params: {tag: "astro"}, props: {posts: allPosts}},
-    {params: {tag: "successes"}, props: {posts: allPosts}},
-    {params: {tag: "community"}, props: {posts: allPosts}},
-    {params: {tag: "blogging"}, props: {posts: allPosts}},
-    {params: {tag: "setbacks"}, props: {posts: allPosts}},
-    {params: {tag: "learning in public"}, props: {posts: allPosts}}
-  ];
+  const retVal2 = uniqueTags.map((tag) => {
+    const filteredPosts = allPosts.filter((post) => post.frontmatter.tags.includes(tag));
+      return {
+        params: { tag },
+        props: { posts: filteredPosts },
+      };
+    }); 
 
   return retVal2;
 
@@ -27,11 +24,11 @@ export async function getStaticPaths() : Promise<AstroBlogPostWithParams[]> {
 
 const { tag } = Astro.params;
 const { posts } = Astro.props;
-const filteredPosts = posts.filter((post) => post.frontmatter.tags?.includes(tag));
+
 ---
 <BaseLayout pageTitle={tag}>
   <p>Posts tagged with {tag}</p>
   <ul>
-    {filteredPosts.map((post) => <BlogPost url={post.url} title={post.frontmatter.title}/>)}
+    {posts.map((post) => <BlogPost url={post.url} title={post.frontmatter.title}/>)}
   </ul>
 </BaseLayout>
