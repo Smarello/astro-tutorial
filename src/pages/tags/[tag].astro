@@ -1,0 +1,37 @@
+---
+import type { MarkdownInstance } from 'astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import BlogPost from '../../components/BlogPost.astro';
+
+type AstroBlogPostWithParams = {params: {tag: string}, props: { posts: MarkdownInstance<Record<string, any>>[]}};
+
+export async function getStaticPaths() : Promise<AstroBlogPostWithParams[]> {
+  
+  const allPosts = await Astro.glob('../posts/*.md');
+  const allComponents = await Astro.glob('../../components/*.astro');
+  console.log(JSON.stringify(allComponents));
+  
+
+  const retVal2 = [
+    {params: {tag: "astro"}, props: {posts: allPosts}},
+    {params: {tag: "successes"}, props: {posts: allPosts}},
+    {params: {tag: "community"}, props: {posts: allPosts}},
+    {params: {tag: "blogging"}, props: {posts: allPosts}},
+    {params: {tag: "setbacks"}, props: {posts: allPosts}},
+    {params: {tag: "learning in public"}, props: {posts: allPosts}}
+  ];
+
+  return retVal2;
+
+}
+
+const { tag } = Astro.params;
+const { posts } = Astro.props;
+const filteredPosts = posts.filter((post) => post.frontmatter.tags?.includes(tag));
+---
+<BaseLayout pageTitle={tag}>
+  <p>Posts tagged with {tag}</p>
+  <ul>
+    {filteredPosts.map((post) => <BlogPost url={post.url} title={post.frontmatter.title}/>)}
+  </ul>
+</BaseLayout>
